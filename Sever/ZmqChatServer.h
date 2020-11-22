@@ -1,8 +1,9 @@
+#ifndef __ZMQCHATSERVER_H_
+#define __ZMQCHATSERVER_H_
+
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
+#include <string>
+#include <unistd.h>
 
 #include <zmq.hpp>
 
@@ -11,4 +12,8 @@ class CZmqChatServer
 public:
     CZmqChatServer();
     ~CZmqChatServer();
+
+    void run();
 };
+
+#endif
