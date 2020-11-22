@@ -1,30 +1,35 @@
-#include<zmq.hpp>
-#include <string>
+#include <zmq.hpp>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <iostream>
-#include <unistd.h>
+
+#define within(num) (int) ((float) num *random() / (RAND_MAX + 1.0))
+
 
 int main()
 {
-    //prepare our context and sockets
-    zmq::context_t context (1);
-    zmq::socket_t socket (context, ZMQ_REP);
-    socket.bind("tcp://*:5555");
+    //prepare context and publisher
+    zmq::context_t context(1);
+    zmq::socket_t publisher(context, ZMQ_PUB);
+    publisher.bind("tcp://*:5556");
+    publisher.bind("ipc://weather.ipc"); // Not usable on wondows/
 
-    while(true)
-    {
-        zmq::message_t request;
+    //Initialize random number generator
+    srandom ((unsigned) time (NULL));
+    while (1) {
+        int zipcode, temperature, relhumidity;
 
-        //Wait for the next request from client
-        socket.recv (&request);
-        std::cout << "Recieved Hello\n";
+        //get values that will fool the boss
 
-        //Do some work
-        sleep(1);
+        zipcode     = within(100000);
+        temperature = within(215) - 80;
+        relhumidity = within(50) + 10;
 
-        //Send reply back to client
-        zmq::message_t reply (5);
-        memcpy(reply.data(), "World", 5);
-        socket.send (reply);
+        // send messages to all subscribesr
+        zmq::message_t message(20);
+        snprintf((char*) message.data(), 20, "%05d %d %d", zipcode, temperature, relhumidity);
+        publisher.send(message);
     }
 
     return 0;
