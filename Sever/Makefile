@@ -18,7 +18,7 @@
 # clean:
 # 	rm -rf *.o $(EXECUTABLE)
 
-EXECUTABLE = server
+EXECUTABLE = server 
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -30,7 +30,7 @@ CC = g++
 CPPFLAGS += -Iinclude
 CFLAGS += -Wall
 LDFLAGS += 
-LDLIBS += -lzmq
+LDLIBS += -lzmq -lpthread
 
 .PHONY: all clean
 
