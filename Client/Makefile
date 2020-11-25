@@ -1,19 +1,26 @@
-CC=g++
-CFLAGS=-c -Wall
-LDFLAGS=-lzmq
-SOURCES=main.cpp ZmqChatClient.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=chatClient
+EXECUTABLE = client 
 
-all: $(SOURCES) $(EXECUTABLE)
-	
-$(EXECUTABLE): $(OBJECTS) 
-	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
+SRC_DIR = src
+OBJ_DIR = obj
 
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+SRC = $(wildcard $(SRC_DIR)/*cpp)
+OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
+CC = g++
+CPPFLAGS += -Iinclude
+CFLAGS += -Wall
+LDFLAGS += 
+LDLIBS += -lzmq -lpthread
 
+.PHONY: all clean
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE) : $(OBJ)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf *.o $(EXECUTABLE)
+	rm -f $(OBJ) $(EXECUTABLE)
