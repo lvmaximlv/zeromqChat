@@ -34,6 +34,7 @@ void CZmqChatServer::start()
 
 void CZmqChatServer::stop()
 {
+	std::cout << "Stopping threads...";
 	//if threads is running - stop loops and join threads
 	if(m_flIsWorking.load())
 	{
@@ -41,6 +42,7 @@ void CZmqChatServer::stop()
 		m_sendThr.join();
 		m_receiveThr.join();
 	}
+	std::cout << "Ok.\n";
 }
 
 void CZmqChatServer::startSending() const
@@ -88,10 +90,11 @@ void CZmqChatServer::sendMsg(zmq::socket_t &_socket) const
 {
 	if(std::lock_guard<std::mutex> lock(m_mtx); !m_receivedMessages.empty())
 	{
-		const std::string &messageString = m_receivedMessages.front();  //get message to send
+		std::string &messageString = m_receivedMessages.front();  //get message to send
 
 		print("[Send message]", messageString); //info about message
 
+		messageString = "_from_server_ " + messageString;
 		/* prepare message */
 		zmq::message_t broadcast_msg(messageString.size());
 		memcpy(broadcast_msg.data(), messageString.data(), messageString.size());

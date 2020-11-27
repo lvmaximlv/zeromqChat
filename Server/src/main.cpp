@@ -110,7 +110,7 @@ void startServer()
 	print("starting server...");
 	CZmqChatServer server;
 	server.start();
-	print("...Ok.");
+	print("...Ok.\n");
 
 	while(1)
 	{

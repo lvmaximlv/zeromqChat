@@ -1,82 +1,78 @@
 #ifndef ZMQCHATCLIENT_H
 #define ZMQCHATCLIENT_H
+
 #include <thread>
 #include <mutex>
+#include <variant>
 
 #include <zmq.hpp>
 
 #include "global.h"
 
-static const int g_receiveTimeout = 10; //timeout for waiting message in ms
+namespace ZmqChatClient
+{
+// timeout for waiting/sending message in ms
+static const int g_socketTimeout = 10;
 
-class CWorkerReceiver;
-class CWorkerSender;
 
+/**
+ * @brief The CZmqChatClient class
+ *
+ * CZmqChat client is realisation of the simple zmq chat client.
+ *
+ * It uses ZMQ_PUB socket to send data to the server
+ * and ZMQ_SUB socket to receive data.
+ *
+ * Sending and receiving ports are two adjacent ports.
+ *
+ * to start client use start()
+ */
 class CZmqChatClient
 {
 public:
-    CZmqChatClient();
-    ~CZmqChatClient();
+	//Constructors:
+	CZmqChatClient();
+	CZmqChatClient(std::atomic<bool> &_extQuitFlag);
 
-    void start();
-    void stop();
+	//Destructor
+	~CZmqChatClient();
 
-    friend class CWorkerReceiver;
-    friend class CWorkerSender;
-private:
-    void init();
-
-    void startReceiving() const;
-    void startSending() const;
-
-    void sendMessage(zmq::socket_t &_socket, const std::string &_name) const;
-    void receiveMessage(zmq::socket_t &_socket)const;
-
-    bool checkName(std::string &_name) const;
-    bool checkIp(std::string &_ipaddr) const;
-    bool checkPort(std::string &_port) const;
-
-    static std::string connectParamString(const std::string& _ipaddr, const std::string &_port);
+	void start();								///< start receiving thread and send loop
+	void stop();								///< stop receiving and sending
 
 private:
-    std::string m_name;
-    std::string m_ipAddr;
-    std::string m_sendPort;
-    mutable std::string m_recvPort;
+	void init();								///< init client, get user name, ip address and port
 
-    std::atomic<bool> m_flIsRunning;
+	void startReceiving() const;				///< setup zmq environment for receiving and start recv loop
+	void startSending() const;					///< setup zmq environment for sending and start send loop
 
-    std::unique_ptr<CWorkerSender> m_sender;
-    std::unique_ptr<CWorkerReceiver> m_receiver;
+	void sendMessage(zmq::socket_t &_socket, const std::string &_name) const;	///< send message with given socket
+	void receiveMessage(zmq::socket_t &_socket)const;	///< receive and print message from given socket
 
-    std::thread m_receiveThr;
-    std::thread m_sendThr;
+	bool checkName(std::string &_name) const;	///< check: given name is valid for user name
+	bool checkIp(std::string &_ipaddr) const;	///< check: given ip is valid
+	bool checkPort(std::string &_port) const;	///< check: given port is valid
 
-    mutable std::mutex m_mtx;
-};
-
-/* Receive worker. Used for receiving messages in other thread */
-class CWorkerReceiver
-{
-public:
-    CWorkerReceiver(CZmqChatClient *_client) : m_client(_client) {}
-
-    void run();
+	///< format connect param string from address and port
+	static std::string formatConnectParam(const std::string& _ipaddr, const std::string &_port);
 
 private:
-    CZmqChatClient *m_client;
-};
+	std::string m_name;							///< user name
+	std::string m_ipAddr;						///< server ip address
+	std::string m_serverRecvPort;				///< server receiving port
+	mutable std::string m_serverSendPort;		///< server sending port
 
-/* Send worker. Used for sending messages in other thread */
-class CWorkerSender
-{
-public:
-    CWorkerSender(CZmqChatClient *_client) : m_client(_client) {}
+    bool m_flIsRunning;                         ///< flag: is running
+	mutable std::atomic<bool> m_localQuitFlag;  ///< local quit flag
+	const std::atomic<bool> &m_externalQuitFlag;///< external quit flag
 
-    void run();
+	std::thread m_receiveThr;					///< receive thread
+	std::thread m_sendThr;						///< send thread
 
-private:
-    CZmqChatClient *m_client;
-};
+	mutable std::mutex m_mtx;					///< mutex for shared data
+
+}; //class CZmqChatClient
+
+} // namespace ZmqChatClient
 
 #endif // ZMQCHATCLIENT_H
