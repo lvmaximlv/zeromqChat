@@ -8,12 +8,23 @@
 #include <zmq.hpp>
 
 #include "global.h"
+#include "console.h"
 
 namespace ZmqChatClient
 {
 // timeout for waiting/sending message in ms
 static const int g_socketTimeout = 10;
 
+
+struct ChatMessage
+{
+	std::string serverFilter;
+	std::string userName;
+	std::string message;
+
+	void input(std::stringstream &_inputData);
+	void writeToLog();
+};
 
 /**
  * @brief The CZmqChatClient class

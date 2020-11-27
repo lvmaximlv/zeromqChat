@@ -24,7 +24,6 @@ CZmqChatClient::CZmqChatClient(std::atomic<bool> &_extQuitFlag)
 	, m_localQuitFlag(false)
 	, m_externalQuitFlag(_extQuitFlag)
 {
-
 }
 
 /**
@@ -54,46 +53,13 @@ void CZmqChatClient::start()
 	//set isRunning flag
 	m_flIsRunning = true;
 
+	MT_Console::Console::initialize();
+
 	// start receive thread
 	m_receiveThr = std::thread(&CZmqChatClient::startReceiving, this);
-
-
 	startSending();
 
-// 	zmq::context_t context(1);
-// 	zmq::socket_t socket_push(context, ZMQ_PUSH);
-
-// 	socket_push.setsockopt(ZMQ_SNDTIMEO, g_socketTimeout);
-
-// 	{
-// 		std::lock_guard<std::mutex> lock(m_mtx);
-// 			socket_push.connect(formatConnectParam(m_ipAddr, m_serverRecvPort));
-// 	}
-// 	std::cout << "\n\n********************** Start Client *************************\n\n";
-
-// 	while(!m_localQuitFlag.load() && !m_externalQuitFlag.load())
-// 	{
-// //		std::cout << "You: ";
-// 		std::string inputStr;
-// 		invite();
-// 		std::getline(std::cin, inputStr);
-
-// 		if(!inputStr.empty())
-// 		{
-// 			inputStr = m_name + inputStr;
-
-// 			zmq::message_t message(inputStr.size());
-// 			memcpy(message.data(), inputStr.data(), inputStr.size());
-
-// 			try {
-// 				socket_push.send(message);
-// 				std::cout << "sended...\n";
-// 			} catch ( ... ) {
-// 				std::cout << "send error! exit";
-// 				return;
-// 			}
-// 		}
-// 	}
+	MT_Console::Console::terminate();
 
 	std::cout << "\n\n********************** END CLIENT *************************\n\n";
 }
@@ -164,7 +130,7 @@ void CZmqChatClient::init()
  */
 void CZmqChatClient::startReceiving() const
 {
-	std::cout << "+++++++++++ START RECEIVING ++++++++++\n";
+	// std::cout << "+++++++++++ START RECEIVING ++++++++++\n";
 	/* prepare context and socket */
 	zmq::context_t context(1);
 	zmq::socket_t socket(context, ZMQ_SUB);
@@ -175,7 +141,7 @@ void CZmqChatClient::startReceiving() const
 	socket.setsockopt(ZMQ_SUBSCRIBE, filter.data(), filter.size());
 
 	/* try connect to server */
-	print("Receiver: try connect to server [" + formatConnectParam(m_ipAddr, m_serverSendPort) + "]");
+	// print("Receiver: try connect to server [" + formatConnectParam(m_ipAddr, m_serverSendPort) + "]");
 	try{
 		std::lock_guard<std::mutex> lock(m_mtx);
 		socket.connect(formatConnectParam(m_ipAddr, m_serverSendPort));
@@ -183,19 +149,19 @@ void CZmqChatClient::startReceiving() const
 	catch( ... )
 	{
 		//fail to connect
-		print("FAIL. Exit");
+		// print("FAIL. Exit");
 		m_localQuitFlag.store(true);//exit
 		return;
 	}
 	//successfully conected
-	print("OK.");
+	// print("OK.");
 
 	while(!m_localQuitFlag.load() && !m_externalQuitFlag.load())
 	{
 		receiveMessage(socket);
 	}
 
-	std::cout << "++++++++++ END RECEIVING ++++++++++++\n";
+	// std::cout << "++++++++++ END RECEIVING ++++++++++++\n";
 }
 
 
@@ -215,7 +181,7 @@ void CZmqChatClient::startSending() const
 
 
 	/* try connect to server */
-	print("Sender: try connect to server [" + formatConnectParam(m_ipAddr, m_serverSendPort) + "]");
+	// print("Sender: try connect to server [" + formatConnectParam(m_ipAddr, m_serverSendPort) + "]");
 	std::string name{};
 	try{
 		name = m_name;
@@ -225,20 +191,18 @@ void CZmqChatClient::startSending() const
 	catch( ... )
 	{
 		//fail to connect
-		print("FAIL. Exit");
+		// print("FAIL. Exit");
 		m_localQuitFlag.store(true);
 		return;
 	}
 	//successfully conected
-	print("OK.");
-	std::cout << "**************************************************\n";
+	// print("OK.");
+	// std::cout << "**************************************************\n";
 
 	while(!m_localQuitFlag.load() && !m_externalQuitFlag.load())
 	{
 		sendMessage(socket, name);
 	}
-
-	PLOGI << "exit start sending";
 }
 
 /**
@@ -252,8 +216,9 @@ void CZmqChatClient::startSending() const
 void CZmqChatClient::sendMessage(zmq::socket_t &_socket, const std::string &_name) const
 {
 	std::string inputStr;	
-	invite();
-	std::getline(std::cin, inputStr);
+	// invite();
+	// std::getline(std::cin, inputStr);
+	MT_Console::Console::read(inputStr);
 
 	if(!inputStr.empty())
 	{
@@ -264,9 +229,9 @@ void CZmqChatClient::sendMessage(zmq::socket_t &_socket, const std::string &_nam
 
 		try {
 			_socket.send(message);
-			std::cout << "sended...\n";
+			// std::cout << "sended...\n";
 		} catch ( ... ) {
-			std::cout << "send error! exit";
+			// std::cout << "send error! exit";
 			return;
 		}
 	}
@@ -286,11 +251,23 @@ void CZmqChatClient::receiveMessage(zmq::socket_t &_socket) const
 		zmq::message_t message;
 		if((rc = _socket.recv(&message, ZMQ_DONTWAIT)) == true)
 		{
-			std::string rcvMessage_str = std::string(static_cast<char*>(message.data()), message.size());
-			PLOGI << "RECEIVED MESSAGE " << rcvMessage_str;
-			std::cout << clear() << std::flush
-					  << "received: " << rcvMessage_str
-					  << std::endl << std::flush;
+			// std::string rcvMessage_str = std::string(static_cast<char*>(message.data()), message.size());
+			// PLOGI << "RECEIVED MESSAGE " << rcvMessage_str;
+			// std::cout << clear() << std::flush
+			// 		  << "received: " << rcvMessage_str
+			// 		  << std::endl << std::flush;
+
+			std::stringstream ss(static_cast<char*>(message.data()));
+			std::string filter, username, smessage;
+			ss >> filter >> username;
+			ss.get();
+			std::getline(ss, smessage);
+
+			auto br = [](const std::string &str) { return "["+ str +"] "; };
+
+			// std::cout << br(filter) << br(username) << br(message) << '\n';
+
+			MT_Console::Console::write("[" + username + "] " + smessage);
 		}
 	} while(rc == true);
 	usleep(1);

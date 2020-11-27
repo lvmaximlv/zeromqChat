@@ -1,0 +1,141 @@
+﻿2020-11-27 22:39:30.819 INFO  [13979] [main@53] 
+
+==============================================START CLIENT==============================================
+2020-11-27 22:39:31.832 INFO  [13979] [ZmqChatClient::CZmqChatClient::checkName@312] user name <- User
+2020-11-27 22:39:32.040 INFO  [13979] [ZmqChatClient::CZmqChatClient::checkIp@322] server ip <- localhost
+2020-11-27 22:39:32.415 INFO  [13979] [ZmqChatClient::CZmqChatClient::checkPort@335] sendPort <- 5555
+2020-11-27 22:39:32.416 INFO  [13979] [ZmqChatClient::CZmqChatClient::checkPort@336] recvPort <- 5556
+2020-11-27 22:39:32.416 INFO  [13982] [print_impl@21] Receiver: try connect to server [tcp://localhost:5556]
+2020-11-27 22:39:32.416 INFO  [13982] [print_impl@21] OK.
+2020-11-27 22:39:32.416 INFO  [13979] [print_impl@21] Sender: try connect to server [tcp://localhost:5556]
+2020-11-27 22:39:32.416 INFO  [13979] [print_impl@21] OK.
+2020-11-27 22:39:41.785 INFO  [13982] [ZmqChatClient::CZmqChatClient::receiveMessage@290] RECEIVED MESSAGE _from_server_ User: This is a basic message
+2020-11-27 22:44:40.246 INFO  [13979] [print_impl@21] caught signal: 
+2020-11-27 22:44:40.246 INFO  [13979] [print_impl@21] 2
+2020-11-27 22:44:40.248 INFO  [13979] [ZmqChatClient::CZmqChatClient::startSending@241] exit start sending
+2020-11-27 22:44:40.250 INFO  [13979] [print_impl@21] Stopping threads...
+2020-11-27 22:44:40.250 INFO  [13979] [print_impl@21] receiver joined
+2020-11-27 22:44:40.250 INFO  [13979] [print_impl@21] sender joined
+2020-11-27 22:44:40.250 INFO  [13979] [print_impl@21] Ok.
+
+2020-11-27 22:44:40.250 INFO  [13979] [main@67] ==============================================END CLIENT==============================================
+
+
+2020-11-27 22:44:45.952 INFO  [14190] [main@53] 
+
+==============================================START CLIENT==============================================
+2020-11-27 22:44:46.141 INFO  [14190] [ZmqChatClient::CZmqChatClient::checkName@285] user name <- User
+2020-11-27 22:44:46.317 INFO  [14190] [ZmqChatClient::CZmqChatClient::checkIp@295] server ip <- localhost
+2020-11-27 22:44:46.725 INFO  [14190] [ZmqChatClient::CZmqChatClient::checkPort@308] sendPort <- 5555
+2020-11-27 22:44:46.725 INFO  [14190] [ZmqChatClient::CZmqChatClient::checkPort@309] recvPort <- 5556
+2020-11-27 22:44:46.725 INFO  [14191] [print_impl@21] Receiver: try connect to server [tcp://localhost:5556]
+2020-11-27 22:44:46.726 INFO  [14190] [print_impl@21] Sender: try connect to server [tcp://localhost:5556]
+2020-11-27 22:44:46.726 INFO  [14191] [print_impl@21] OK.
+2020-11-27 22:44:46.726 INFO  [14190] [print_impl@21] OK.
+2020-11-27 22:46:59.813 INFO  [14190] [print_impl@21] caught signal: 
+2020-11-27 22:46:59.813 INFO  [14190] [print_impl@21] 2
+2020-11-27 22:46:59.813 INFO  [14190] [ZmqChatClient::CZmqChatClient::startSending@206] exit start sending
+2020-11-27 22:46:59.813 INFO  [14190] [print_impl@21] Stopping threads...
+2020-11-27 22:46:59.814 INFO  [14190] [print_impl@21] receiver joined
+2020-11-27 22:46:59.814 INFO  [14190] [print_impl@21] sender joined
+2020-11-27 22:46:59.814 INFO  [14190] [print_impl@21] Ok.
+
+2020-11-27 22:46:59.814 INFO  [14190] [main@67] ==============================================END CLIENT==============================================
+
+
+2020-11-27 22:47:10.215 INFO  [15457] [main@53] 
+
+==============================================START CLIENT==============================================
+2020-11-27 22:47:18.860 INFO  [15457] [ZmqChatClient::CZmqChatClient::checkName@285] user name <- User
+2020-11-27 22:47:19.068 INFO  [15457] [ZmqChatClient::CZmqChatClient::checkIp@295] server ip <- localhost
+2020-11-27 22:47:19.388 INFO  [15457] [ZmqChatClient::CZmqChatClient::checkPort@308] sendPort <- 5555
+2020-11-27 22:47:19.388 INFO  [15457] [ZmqChatClient::CZmqChatClient::checkPort@309] recvPort <- 5556
+2020-11-27 22:47:19.389 INFO  [15469] [print_impl@21] Receiver: try connect to server [tcp://localhost:5556]
+2020-11-27 22:47:19.389 INFO  [15469] [print_impl@21] OK.
+2020-11-27 22:47:19.389 INFO  [15457] [print_impl@21] Sender: try connect to server [tcp://localhost:5556]
+2020-11-27 22:47:19.389 INFO  [15457] [print_impl@21] OK.
+2020-11-27 22:49:26.842 INFO  [15457] [print_impl@21] caught signal: 
+2020-11-27 22:49:26.842 INFO  [15457] [print_impl@21] 2
+2020-11-27 22:49:26.842 INFO  [15457] [ZmqChatClient::CZmqChatClient::startSending@206] exit start sending
+2020-11-27 22:49:26.843 INFO  [15457] [print_impl@21] Stopping threads...
+2020-11-27 22:49:26.844 INFO  [15457] [print_impl@21] receiver joined
+2020-11-27 22:49:26.844 INFO  [15457] [print_impl@21] sender joined
+2020-11-27 22:49:26.844 INFO  [15457] [print_impl@21] Ok.
+
+2020-11-27 22:49:26.844 INFO  [15457] [main@67] ==============================================END CLIENT==============================================
+
+
+2020-11-27 22:49:33.814 INFO  [15676] [main@53] 
+
+==============================================START CLIENT==============================================
+2020-11-27 22:49:34.874 INFO  [15676] [ZmqChatClient::CZmqChatClient::checkName@286] user name <- User
+2020-11-27 22:49:35.074 INFO  [15676] [ZmqChatClient::CZmqChatClient::checkIp@296] server ip <- localhost
+2020-11-27 22:49:35.386 INFO  [15676] [ZmqChatClient::CZmqChatClient::checkPort@309] sendPort <- 5555
+2020-11-27 22:49:35.386 INFO  [15676] [ZmqChatClient::CZmqChatClient::checkPort@310] recvPort <- 5556
+2020-11-27 22:49:35.387 INFO  [15677] [print_impl@21] Receiver: try connect to server [tcp://localhost:5556]
+2020-11-27 22:49:35.387 INFO  [15677] [print_impl@21] OK.
+2020-11-27 22:49:35.387 INFO  [15676] [print_impl@21] Sender: try connect to server [tcp://localhost:5556]
+2020-11-27 22:49:35.387 INFO  [15676] [print_impl@21] OK.
+2020-11-27 22:50:24.642 INFO  [15676] [print_impl@21] caught signal: 
+2020-11-27 22:50:24.642 INFO  [15676] [print_impl@21] 2
+2020-11-27 22:50:24.642 INFO  [15676] [ZmqChatClient::CZmqChatClient::startSending@206] exit start sending
+2020-11-27 22:50:24.643 INFO  [15676] [print_impl@21] Stopping threads...
+2020-11-27 22:50:24.643 INFO  [15676] [print_impl@21] receiver joined
+2020-11-27 22:50:24.643 INFO  [15676] [print_impl@21] sender joined
+2020-11-27 22:50:24.643 INFO  [15676] [print_impl@21] Ok.
+
+2020-11-27 22:50:24.643 INFO  [15676] [main@67] ==============================================END CLIENT==============================================
+
+
+2020-11-27 22:50:29.789 INFO  [15775] [main@53] 
+
+==============================================START CLIENT==============================================
+2020-11-27 22:50:30.642 INFO  [15775] [ZmqChatClient::CZmqChatClient::checkName@287] user name <- User
+2020-11-27 22:50:30.818 INFO  [15775] [ZmqChatClient::CZmqChatClient::checkIp@297] server ip <- localhost
+2020-11-27 22:50:30.970 INFO  [15775] [ZmqChatClient::CZmqChatClient::checkPort@310] sendPort <- 5555
+2020-11-27 22:50:30.970 INFO  [15775] [ZmqChatClient::CZmqChatClient::checkPort@311] recvPort <- 5556
+2020-11-27 22:50:30.970 INFO  [15776] [print_impl@21] Receiver: try connect to server [tcp://localhost:5556]
+2020-11-27 22:50:30.970 INFO  [15776] [print_impl@21] OK.
+2020-11-27 22:50:30.970 INFO  [15775] [print_impl@21] Sender: try connect to server [tcp://localhost:5556]
+2020-11-27 22:50:30.971 INFO  [15775] [print_impl@21] OK.
+2020-11-27 23:33:21.033 INFO  [15775] [print_impl@21] caught signal: 
+2020-11-27 23:33:21.033 INFO  [15775] [print_impl@21] 2
+2020-11-27 23:33:21.033 INFO  [15775] [ZmqChatClient::CZmqChatClient::startSending@206] exit start sending
+2020-11-27 23:33:21.033 INFO  [15775] [print_impl@21] Stopping threads...
+2020-11-27 23:33:21.033 INFO  [15775] [print_impl@21] receiver joined
+2020-11-27 23:33:21.033 INFO  [15775] [print_impl@21] sender joined
+2020-11-27 23:33:21.033 INFO  [15775] [print_impl@21] Ok.
+
+2020-11-27 23:33:21.033 INFO  [15775] [main@67] ==============================================END CLIENT==============================================
+
+
+2020-11-27 23:54:32.501 INFO  [18463] [main@53] 
+
+==============================================START CLIENT==============================================
+2020-11-27 23:54:40.547 INFO  [18463] [print_impl@22] caught signal: 
+2020-11-27 23:54:40.547 INFO  [18463] [print_impl@22] 2
+2020-11-27 23:54:41.874 INFO  [18463] [print_impl@22] caught signal: 
+2020-11-27 23:54:41.874 INFO  [18463] [print_impl@22] 2
+2020-11-27 23:54:42.114 INFO  [18463] [print_impl@22] caught signal: 
+2020-11-27 23:54:42.114 INFO  [18463] [print_impl@22] 2
+2020-11-27 23:58:26.068 INFO  [18654] [main@53] 
+
+==============================================START CLIENT==============================================
+2020-11-27 23:58:26.793 INFO  [18654] [ZmqChatClient::CZmqChatClient::checkName@289] user name <- User
+2020-11-27 23:58:27.369 INFO  [18654] [ZmqChatClient::CZmqChatClient::checkIp@299] server ip <- localhost
+2020-11-27 23:58:28.224 INFO  [18654] [ZmqChatClient::CZmqChatClient::checkPort@312] sendPort <- 5555
+2020-11-27 23:58:28.224 INFO  [18654] [ZmqChatClient::CZmqChatClient::checkPort@313] recvPort <- 5556
+2020-11-27 23:59:22.008 INFO  [18654] [print_impl@22] caught signal: 
+2020-11-27 23:59:22.008 INFO  [18654] [print_impl@22] 2
+2020-11-27 23:59:25.632 INFO  [18654] [print_impl@22] caught signal: 
+2020-11-27 23:59:25.632 INFO  [18654] [print_impl@22] 2
+2020-11-27 23:59:26.576 INFO  [18654] [print_impl@22] caught signal: 
+2020-11-27 23:59:26.576 INFO  [18654] [print_impl@22] 2
+2020-11-27 23:59:26.840 INFO  [18654] [print_impl@22] caught signal: 
+2020-11-27 23:59:26.840 INFO  [18654] [print_impl@22] 2
+2020-11-27 23:59:27.088 INFO  [18654] [print_impl@22] caught signal: 
+2020-11-27 23:59:27.088 INFO  [18654] [print_impl@22] 2
+2020-11-27 23:59:27.296 INFO  [18654] [print_impl@22] caught signal: 
+2020-11-27 23:59:27.296 INFO  [18654] [print_impl@22] 2
+2020-11-27 23:59:27.600 INFO  [18654] [print_impl@22] caught signal: 
+2020-11-27 23:59:27.600 INFO  [18654] [print_impl@22] 2
