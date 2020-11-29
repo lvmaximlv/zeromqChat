@@ -18,8 +18,8 @@ std::atomic<bool> g_quit(false);
  */
 static void s_signal_handler(int signal_value)
 {
+	PLOGI << "quitting via signal [" << signal_value << "]"; 
 	g_quit.store(true);
-	print ("caught signal: ", signal_value);
 }
 
 

@@ -1,14 +1,15 @@
 #ifndef ZMQCHATCLIENT_H
 #define ZMQCHATCLIENT_H
 
+#include <iostream>
 #include <thread>
 #include <mutex>
-#include <variant>
+#include <atomic>
+#include <regex>
 
 #include <zmq.hpp>
 
-#include "global.h"
-// #include "ChatMessage.h"
+#include <plog/Log.h>
 
 namespace ZmqChatClient
 {
@@ -72,23 +73,25 @@ private:
 
 	mutable std::mutex m_mtx;					///< mutex for shared data
 
-	mutable std::string m_inputString;
-	mutable std::mutex m_mtxIput;
-
 }; //class CZmqChatClient
 
 
+/**
+ * @brief CChatMessage struct
+ * 
+ * 	simple wrap zmq::message_t
+ */
 struct CChatMessage : public zmq::message_t
 {
-	std::string m_filter;
-	std::string m_username;
-	std::string m_message;
+	std::string m_filter;		///< server filter
+	std::string m_username;		///< username
+	std::string m_message;		///< message
 
 	CChatMessage() = default;
-	CChatMessage(const std::string &_name, const std::string &_message);
+	CChatMessage(const std::string &_name, const std::string &_message);	///< create message from data
 
 	typedef std::tuple<std::string, std::string, std::string> messageDataT;
-	messageDataT getData();
+	messageDataT getData();		///<rceive data from message
 };
 
 } // namespace ZmqChatClient
