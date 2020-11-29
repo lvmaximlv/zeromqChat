@@ -1,23 +1,3 @@
-# CC=g++
-# CFLAGS=-c -Wall
-# LDFLAGS=-lzmq
-# SOURCES=main.cpp ZmqChatServer.cpp
-# OBJECTS=$(SOURCES:.cpp=.o)
-# EXECUTABLE=chatServer
-
-# all: $(SOURCES) $(EXECUTABLE)
-	
-# $(EXECUTABLE): $(OBJECTS) 
-# 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
-
-# .cpp.o:
-# 	$(CC) $(CFLAGS) $< -o $@
-
-
-
-# clean:
-# 	rm -rf *.o $(EXECUTABLE)
-
 EXECUTABLE = server 
 
 SRC_DIR = src
@@ -34,13 +14,16 @@ LDLIBS += -lzmq -lpthread
 
 .PHONY: all clean
 
-all: $(EXECUTABLE)
+all: objdir $(EXECUTABLE)
 
 $(EXECUTABLE) : $(OBJ)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+objdir: 
+	mkdir -p $(OBJ_DIR)
 
 clean:
 	rm -f $(OBJ) $(EXECUTABLE)
