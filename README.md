@@ -1,45 +1,45 @@
 # zeromqChat
 
-zeromqChat is simple client/server chat using zeromq
+zeromqChat is simple client/server chat using ZeroMQ
 
 ## Requirements
 
- - [Zermq](https://zeromq.org/download/) Tested with 4.3.2
+ - [ZerMQ](https://zeromq.org/download/) Tested with 4.3.2
 
  ## Installation
 
  1.	Install ZeroMQ. `$ apt-get install libzmq3-dev`
  2.	Install server:
 
- 	```bash
-		cd Server/
-		make
- 	```
+```bash
+cd Server/
+make
+```
  3. Install client:
 
-	```bash
-		cd Client/
-		make
-	```
+```bash
+cd Client/
+make
+```
 
 ## Usage
 
 ### Server
 
-You can start server as a daemon or in interactive mode.
-Go to server dir: `$ cd  Server/`
+	You can start server as a daemon or in interactive mode.
+	Go to server dir: `$ cd  Server/`
 
 #### interactive mode
 
-To start server in interactive mode use `$ ./server -i`
+	To start server in interactive mode use `$ ./server -i`
 
 #### daemon mode
 
-To start sever in daemon mod use `$ ./server -d`
+	To start sever in daemon mod use `$ ./server -d`
 
 ### Client
 
-Go to client dir: `$ cd Client/`
+	Go to client dir: `$ cd Client/`
 
 #### start client
 
