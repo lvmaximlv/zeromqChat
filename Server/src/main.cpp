@@ -18,17 +18,45 @@
 std::atomic<bool> g_quit(false);  //flag for exit if sigint or sigterm were catched
 std::atomic<bool> g_isDaemon(false); //flag is set id programm run as a daemon
 
-/*********************************
- * got_signal(int) called when
- * sigint or sigterm were catched
- *********************************/ 
-inline void got_signal(int)
+/**
+ * @brief s_signal_handler
+ *
+ * s_signal_handler(int) is connected to SIGINT and SIGTERM
+ *
+ * @param signal_value number of calling signal
+ */
+static void s_signal_handler(int signal_value)
 {
+	PLOGI << "quitting via signal [" << signal_value << "]"; 
 	g_quit.store(true);
-	print ("Signal caught");
 }
 
-void startServer(); // main code
+/**
+ * @brief s_catch_signals
+ *
+ * Connect SIGINT and SIGTERM to s_signal_handler
+ */
+static void s_catch_signals()
+{
+	struct sigaction action;
+	action.sa_handler = s_signal_handler;
+	action.sa_flags = 0;
+	sigemptyset(&action.sa_mask);
+	sigaction(SIGINT, &action, NULL);
+	sigaction(SIGTERM, &action, NULL);
+}
+
+void startServer()
+{
+	try{
+	CZmqChatServer server;
+	server.start();
+	}
+	catch ( ... )
+	{
+		print("bad exit");
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -38,12 +66,7 @@ int main(int argc, char *argv[])
 	PLOG_INFO << "\n\n==============================================START SERVER==============================================\n\n";
 
 	/* signals handle */
-		struct sigaction sa;
-		memset(&sa, 0, sizeof(sa));
-		sa.sa_handler = got_signal;
-		sigfillset(&sa.sa_mask);
-		sigaction(SIGINT, &sa, NULL);
-		sigaction(SIGTERM, &sa, NULL);
+	s_catch_signals();
 
 	/* Our process ID and Session ID */
 	pid_t pid, sid;
@@ -105,22 +128,4 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-void startServer()
-{
-	print("starting server...");
-	CZmqChatServer server;
-	server.start();
-	print("...Ok.\n");
 
-	while(1)
-	{
-		//wait for exit code...
-		sleep(1);
-
-		if(g_quit.load())
-		{
-			PLOG_INFO << "EXIT VIA SIGNAL...";
-			break;
-		}
-	}
-}

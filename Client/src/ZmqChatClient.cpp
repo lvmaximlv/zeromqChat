@@ -9,7 +9,9 @@ using namespace ZmqChatClient;
  * @brief CZmqChatClient constructor
  */
 CZmqChatClient::CZmqChatClient()
-    : m_flIsRunning(false)
+    : m_serverRecvPort("5555")
+	, m_serverSendPort("5556")
+	, m_flIsRunning(false)
 	, m_localQuitFlag(false)
 	, m_externalQuitFlag(m_localQuitFlag)
 {
@@ -21,7 +23,9 @@ CZmqChatClient::CZmqChatClient()
  * @param[in] _extQuitFlag external quit flag. Setting it to 'true' will end send and recv loops
  */
 CZmqChatClient::CZmqChatClient(std::atomic<bool> &_extQuitFlag)
-    : m_flIsRunning(false)
+    : m_serverRecvPort("5555")
+	, m_serverSendPort("5556")
+	, m_flIsRunning(false)
 	, m_localQuitFlag(false)
 	, m_externalQuitFlag(_extQuitFlag)
 {
@@ -115,11 +119,13 @@ void CZmqChatClient::init()
 		std::getline(std::cin, m_ipAddr);
 	} while(!checkIp(m_ipAddr) && !m_externalQuitFlag.load());
 
-	/* get server port and check it */
-	do{
-		std::cout << "Enter server port (leave empty for 5555): ";
-		std::getline(std::cin, m_serverRecvPort);
-	} while(!checkPort(m_serverRecvPort) && !m_externalQuitFlag.load());
+	// port chosing on server is not implemented yet...
+
+	// /* get server port and check it */
+	// do{
+	// 	std::cout << "Enter server port (leave empty for 5555): ";
+	// 	std::getline(std::cin, m_serverRecvPort);
+	// } while(!checkPort(m_serverRecvPort) && !m_externalQuitFlag.load());
 
 
 	std::cout << "**************************************************\n\n";
