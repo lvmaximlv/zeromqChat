@@ -1,0 +1,26 @@
+EXECUTABLE = client 
+
+SRC_DIR = src
+OBJ_DIR = obj
+
+SRC = $(wildcard $(SRC_DIR)/*cpp)
+OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
+CC = g++
+CPPFLAGS += -Iinclude -std=c++17
+CFLAGS += -Wall
+LDFLAGS += 
+LDLIBS += -lzmq -lpthread
+
+.PHONY: all clean
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE) : $(OBJ)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJ) $(EXECUTABLE)
