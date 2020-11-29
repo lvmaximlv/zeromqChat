@@ -26,20 +26,20 @@ make
 
 ### Server
 
-	You can start server as a daemon or in interactive mode.
-	Go to server dir: `$ cd  Server/`
+You can start server as a daemon or in interactive mode.
+Go to server dir: `$ cd  Server/`
 
 #### interactive mode
 
-	To start server in interactive mode use `$ ./server -i`
+To start server in interactive mode use `$ ./server -i`
 
 #### daemon mode
 
-	To start sever in daemon mod use `$ ./server -d`
+To start sever in daemon mod use `$ ./server -d`
 
 ### Client
 
-	Go to client dir: `$ cd Client/`
+Go to client dir: `$ cd Client/`
 
 #### start client
 
