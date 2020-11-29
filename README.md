@@ -1,6 +1,6 @@
-# zeromqChat
+# ZeromqChat
 
-zeromqChat is simple client/server chat using ZeroMQ
+ZeromqChat is simple client/server chat using ZeroMQ
 
 ## Requirements
 
