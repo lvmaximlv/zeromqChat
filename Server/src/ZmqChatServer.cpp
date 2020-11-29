@@ -11,9 +11,7 @@ CZmqChatServer::CZmqChatServer(const uint16_t _port)
 	, m_sendPort(_port + 1)
 	, m_flIsWorking(false)
 {
-	// initialize workers
-	m_sender = std::make_unique<CWorkerSender>(this);
-	m_receiver = std::make_unique<CWorkerReceiver>(this);
+
 }
 
 
@@ -28,8 +26,8 @@ void CZmqChatServer::start()
 	m_flIsWorking.store(true); //set working flag
 
 	/* start threads */
-	m_receiveThr = std::thread(&CWorkerReceiver::run, m_receiver.get());
-	m_sendThr = std::thread(&CWorkerSender::run, m_sender.get());
+	m_receiveThr = std::thread(&CZmqChatServer::startReceiving, this);
+	startSending();
 }
 
 void CZmqChatServer::stop()
@@ -39,8 +37,14 @@ void CZmqChatServer::stop()
 	if(m_flIsWorking.load())
 	{
 		m_flIsWorking.store(false);
-		m_sendThr.join();
-		m_receiveThr.join();
+		if(m_sendThr.joinable())
+		{
+			m_sendThr.join();
+		}
+		if(m_receiveThr.joinable())
+		{
+			m_receiveThr.join();
+		}
 	}
 	std::cout << "Ok.\n";
 }
@@ -88,7 +92,7 @@ void CZmqChatServer::startReceiving() const
 
 void CZmqChatServer::sendMsg(zmq::socket_t &_socket) const
 {
-	if(std::lock_guard<std::mutex> lock(m_mtx); !m_receivedMessages.empty())
+	if(std::lock_guard<std::mutex> lock{m_mtx}; !m_receivedMessages.empty())
 	{
 		std::string &messageString = m_receivedMessages.front();  //get message to send
 
@@ -133,15 +137,3 @@ std::string CZmqChatServer::getConnectParamStr(const uint16_t &_port)
 	return ("tcp://*:" + std::to_string(_port));
 }
 
-
-
-
-void CWorkerReceiver::run()
-{
-	m_server->startReceiving();
-}
-
-void CWorkerSender::run()
-{
-	m_server->startSending();
-}
