@@ -69,13 +69,17 @@ void CZmqChatClient::stop()
     if(m_flIsRunning)
     {
         print ("Stopping threads...");
-        if(m_receiveThr.joinable())
-            m_receiveThr.join();
-        print("receiver joined");
+        if(m_receiveThr.joinable()) 
+		{ 
+			m_receiveThr.join(); 
+        	print("receiver joined");
+		}
 
-        if(m_sendThr.joinable())
-            m_sendThr.join();
-	    print("sender joined");
+        if(m_sendThr.joinable()) 
+		{ 
+			m_sendThr.join(); 
+	    	print("sender joined");
+		}
 	    print("Ok.\n");
     }
     std::cout << "true";
@@ -214,9 +218,7 @@ void CZmqChatClient::sendMessage(zmq::socket_t &_socket, const std::string &_nam
 
 		try {
 			_socket.send(message);
-			// std::cout << "sended...\n";
 		} catch ( ... ) {
-			// std::cout << "send error! exit";
 			return;
 		}
 	}
@@ -294,4 +296,21 @@ bool CZmqChatClient::checkPort(std::string &_port) const
 std::string CZmqChatClient::formatConnectParam(const std::string &_ipaddr, const std::string &_port)
 {
 	return ("tcp://" + _ipaddr + ":" + _port);
+}
+
+
+CChatMessage::CChatMessage(const std::string &_name, const std::string &_message)
+{
+	std::string message = _name + _message;
+	this->rebuild(message.size());
+	memcpy(this->data(), message.data(), message.size());
+}
+
+CChatMessage::messageDataT CChatMessage::getData()
+{
+	std::stringstream dataStream( static_cast<char*>(this->data()) );	// convert zmq::message_t to stringstream
+	dataStream >> m_filter >> m_username;	 	// get filter and username from sstream
+	dataStream.get();							// remove space
+	std::getline(dataStream, m_message);		//read all left data from sstream
+	return {m_filter, m_username, m_message};	
 }
