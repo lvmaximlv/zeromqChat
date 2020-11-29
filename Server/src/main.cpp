@@ -49,7 +49,7 @@ static void s_catch_signals()
 void startServer()
 {
 	try{
-	CZmqChatServer server;
+	ZmqChatServer::CZmqChatServer server;
 	server.start();
 	}
 	catch ( ... )

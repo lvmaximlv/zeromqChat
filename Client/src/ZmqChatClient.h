@@ -15,6 +15,8 @@ namespace ZmqChatClient
 {
 // timeout for waiting/sending message in ms
 static const int g_socketTimeout = 10;
+static const std::string g_serverFilter = "_from_server_"; // filter for clients that uses sub socket
+
 
 
 /**

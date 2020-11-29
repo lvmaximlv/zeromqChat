@@ -13,7 +13,7 @@ extern std::atomic<bool> g_isDaemon; //flag is set id programm run as a daemon
  * print function gets variadic parameters,
  * stores them into the log
  * and if app is not a daemon prints them to console
- ***************************************************/
+ */
 
 template<typename T>
 void print_impl(const T &t)
@@ -29,6 +29,8 @@ void print(const T& ... t)
 {
 	(void)std::initializer_list<int>{ (print_impl(t), 0)... };
 	std::cout << '\n';
-} 
+}
+
+//********************************************************/
 
 #endif // GLOBAL_H

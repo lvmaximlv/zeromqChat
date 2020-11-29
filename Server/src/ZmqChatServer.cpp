@@ -2,10 +2,23 @@
 
 extern std::atomic<bool> g_quit;
 
+using namespace ZmqChatServer;
+
+/**
+ * @brief Construct a new CZmqChatServer::CZmqChatServer object
+ * 
+ */
 CZmqChatServer::CZmqChatServer()
 	:CZmqChatServer(g_standartRecvPort)
-{}
+{
 
+}
+
+/**
+ * @brief Construct a new CZmqChatServer::CZmqChatServer object from port
+ * 
+ * @param _port port for receiving 
+ */
 CZmqChatServer::CZmqChatServer(const uint16_t _port)
 	: m_recvPort(_port)
 	, m_sendPort(_port + 1)
@@ -14,22 +27,36 @@ CZmqChatServer::CZmqChatServer(const uint16_t _port)
 
 }
 
-
+/**
+ * @brief Destroy the CZmqChatServer::CZmqChatServer object
+ * 
+ * stops server
+ */
 CZmqChatServer::~CZmqChatServer()
 {
 	this->stop(); //stop threads
 }
 
-
+/**
+ * @brief starts server
+ * 
+ */
 void CZmqChatServer::start()
 {
 	m_flIsWorking.store(true); //set working flag
 
-	/* start threads */
+	// start threads 
 	m_receiveThr = std::thread(&CZmqChatServer::startReceiving, this);
+
+	// start sending loop
 	startSending();
 }
 
+/**
+ * @brief stops server
+ * 
+ * join threads
+ */
 void CZmqChatServer::stop()
 {
 	std::cout << "Stopping threads...";
@@ -49,18 +76,24 @@ void CZmqChatServer::stop()
 	std::cout << "Ok.\n";
 }
 
+/**
+ * @brief starts sending
+ * 
+ * prepares context and socket,
+ * sets socket options, bind socket and starts sending loop
+ */
 void CZmqChatServer::startSending() const
 {
 	/* prepare context and socket */
 	print("prepare sending context and socket");
-	zmq::context_t context(4);
+	zmq::context_t context(1);
 	zmq::socket_t socket(context, ZMQ_PUB);
 
 	/* bind send socket to port */
 	print("bind send socket to port :", m_sendPort);
 	socket.bind(getConnectParamStr(m_sendPort));
 
-	//work loop
+	//start sending loop
 	print("start sending messages...");
 	while(!g_quit.load() && m_flIsWorking.load())
 	{
@@ -68,11 +101,17 @@ void CZmqChatServer::startSending() const
 	}
 }
 
+/**
+ * @brief starts receiving
+ * 
+ * prepare context and socket,
+ * sets socket options and starts receiving loop
+ */
 void CZmqChatServer::startReceiving() const
 {
 	/* prepare context and socket */
 	print("prepare recv context and socket");
-	zmq::context_t context(4);
+	zmq::context_t context(1);
 	zmq::socket_t socket(context, ZMQ_PULL);
 
 	/* bind receiving socket to port */
@@ -82,7 +121,7 @@ void CZmqChatServer::startReceiving() const
 	socket.setsockopt(ZMQ_RCVTIMEO, g_receiveTimeout); //set timeout
 
 
-	//work loop
+	//start receiving loop
 	print("start receiving messages...");
 	while(!g_quit.load() && m_flIsWorking.load())
 	{
@@ -90,15 +129,21 @@ void CZmqChatServer::startReceiving() const
 	}
 }
 
+/**
+ * @brief send message via given socket
+ * 
+ * @param[in] _socket socket to send message 
+ */
 void CZmqChatServer::sendMsg(zmq::socket_t &_socket) const
 {
-	if(std::lock_guard<std::mutex> lock{m_mtx}; !m_receivedMessages.empty())
+	if(std::lock_guard<std::mutex> lock{m_mtx}; !m_receivedMessages.empty())	//check messages queue
 	{
 		std::string &messageString = m_receivedMessages.front();  //get message to send
 
 		print("[Send message]", messageString); //info about message
 
-		messageString = "_from_server_ " + messageString;
+		messageString = g_serverFilter + " " + messageString; //add filter param
+
 		/* prepare message */
 		zmq::message_t broadcast_msg(messageString.size());
 		memcpy(broadcast_msg.data(), messageString.data(), messageString.size());
@@ -109,29 +154,36 @@ void CZmqChatServer::sendMsg(zmq::socket_t &_socket) const
 	}
 }
 
+/**
+ * @brief receive message
+ * 
+ * @param[in] _socket socket to receive message
+ */
 void CZmqChatServer::recvMsg(zmq::socket_t &_socket) const
 {
-	zmq::message_t recv_msg;
-
-	try{
-	_socket.recv(&recv_msg);
-	}
-	catch(...)
-	{
-		print("Socket RECV catches expression...");
-		return;
-	}
-	
-	std::string recv_str = std::string(static_cast<char*>(recv_msg.data()), recv_msg.size());
-	if(!recv_str.empty())
-	{
-		print("[Receive message]", recv_str);
-		std::lock_guard<std::mutex> lock(m_mtx);
-		m_receivedMessages.push(recv_str);
-	}
+	bool rc;
+	do {
+		zmq::message_t recv_msg;
+		if((rc = _socket.recv(&recv_msg, ZMQ_DONTWAIT)) == true) // check zmq recv queue for ready messages
+		{
+			std::string recv_str = std::string(static_cast<char*>(recv_msg.data()), recv_msg.size()); //convert message_t to string
+			if(!recv_str.empty())
+			{
+				print("[Receive message]", recv_str);
+				std::lock_guard<std::mutex> lock(m_mtx);
+				m_receivedMessages.push(recv_str);	// push message to queue
+			}
+		}
+	} while(rc == true);
+	usleep(1);
 } 
 
-
+/**
+ * @brief form a connection param string
+ * 
+ * @param[in] _port port  
+ * @return std::string connection param string
+ */
 std::string CZmqChatServer::getConnectParamStr(const uint16_t &_port)
 {
 	return ("tcp://*:" + std::to_string(_port));

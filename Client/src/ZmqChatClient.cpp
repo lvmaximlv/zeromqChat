@@ -147,9 +147,8 @@ void CZmqChatClient::startReceiving() const
 
 	/* set socket options */
 	PLOGI << "[receiving] set socket options";
-	const std::string filter = "_from_server_ ";
 	socket.setsockopt(ZMQ_RCVTIMEO, g_socketTimeout);
-	socket.setsockopt(ZMQ_SUBSCRIBE, filter.data(), filter.size());
+	socket.setsockopt(ZMQ_SUBSCRIBE, g_serverFilter.data(), g_serverFilter.size());
 
 	/* try connect to server */
 	PLOGI << "[receiving] try to connect to server...";
@@ -315,9 +314,9 @@ bool CZmqChatClient::checkName(std::string &_name) const
 {
 	if(_name.empty())
 		_name = "User";
-	if(_name.size() > 255)
+	if(_name.size() > 25)
 	{
-		std::cout << "name must be at least 1 and at max 255 characters long\n";
+		std::cout << "name must be at least 1 and at max 25 characters long\n";
 		return false;
 	}
 
