@@ -8,7 +8,6 @@
 #include <zmq.hpp>
 
 #include "global.h"
-#include "console.h"
 
 namespace ZmqChatClient
 {
@@ -81,6 +80,9 @@ private:
 	std::thread m_sendThr;						///< send thread
 
 	mutable std::mutex m_mtx;					///< mutex for shared data
+
+	mutable std::string m_inputString;
+	mutable std::mutex m_mtxIput;
 
 }; //class CZmqChatClient
 
